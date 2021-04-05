@@ -1,7 +1,7 @@
 import talib, numpy, sys, time
 from datetime import datetime
 sys.path.append("..")
-import api_requests, trade_book, plotly_chart
+import api_requests, trade_book, chart
 
 #SYMBOL and AMOUNT
 TRADE_SYMBOL = ''
