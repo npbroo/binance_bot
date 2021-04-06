@@ -20,8 +20,25 @@ def calculate_profit():
         trade_profit = 0
         trades = []
         trade_num = 1
+        trade_i = 0
         for line in reader:
-
+            
+            if(line['Trade Type'] == 'BUY'):
+                trade_profit -= Decimal(line['Price'])
+                trade_i += 1
+            if(line['Trade Type'] == 'SELL'):
+                trade_profit += Decimal(line['Price'])
+                trade_i += 1
+            
+            if(trade_i == 2):
+                trade_i = 0
+                trades.append(trade_profit)
+                print('Trade #{}: {}'.format(trade_num, trade_profit))
+                total_profit += trade_profit
+                trade_profit = 0
+                trade_num += 1
+                
+            '''
             if(line['Trade Type'] == 'BUY'):
                 trade_profit -= Decimal(line['Price'])
             if(line['Trade Type'] == 'SELL'):
@@ -31,6 +48,7 @@ def calculate_profit():
                 total_profit += trade_profit
                 trade_profit = 0
                 trade_num += 1
+            '''
 
         #print('Avg Trade: {}'.format(np.average(trades)))
         print('Total Profit: {}\n'.format(total_profit))

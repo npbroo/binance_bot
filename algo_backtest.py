@@ -4,8 +4,8 @@ from datetime import datetime
 
 SYMBOL = 'ETHUSDT' # The ticker symbol to check
 AVG_SPREAD = .50 # the average buy/ask spread (for calculating more accurate profits)
-INTERVAL = '1m' # the ticker interval
-TIME_SPAN = '6h' # the timespan of data to get
+INTERVAL = '3m' # the ticker interval
+TIME_SPAN = '1M' # the timespan of data to get
 END_TIME = None
 
 def run_algo_back_test(symbol, avg_spread, interval, time_span, end_time=None):
@@ -19,12 +19,12 @@ def run_algo_back_test(symbol, avg_spread, interval, time_span, end_time=None):
     # initialize the study
     '''
     OTHER STUDIES:
-    rsi_study.init_study(symbol, interval, back_test=True)
     '''
+    #rsi_study.init_study(symbol, interval, back_test=True)
     ttm_sqz_study.init_study(symbol, interval, back_test=True)
 
     #initialize the chart
-    chart.init_chart(historical_data)
+    chart.init_chart(historical_data, SYMBOL)
 
     indicators = None
     #run the study candle by candle
@@ -42,15 +42,17 @@ def run_algo_back_test(symbol, avg_spread, interval, time_span, end_time=None):
         #run the study on each candle to test the strategy
         '''
         OTHER STUDIES:
-        rsi_study.run_study(c, avg_spread=avg_spread)
         '''
+        #rsi_study.run_study(c, avg_spread=avg_spread)
         indicators = ttm_sqz_study.run_study(c, avg_spread=avg_spread)
     
     # add indicator studies to the chart
-    for key in indicators:
-        data = indicators[key]['data']
-        color = indicators[key]['color']
-        chart.add_line_study(data, key, color=color)
+    if(indicators != None):
+        for key in indicators:
+            data = indicators[key]['data']
+            color = indicators[key]['color']
+            subplot = indicators[key]['subplot']
+            chart.add_line_study(data, name=key, color=color, subplot=subplot)
     
     # draw the chart
     chart.draw_chart()
